@@ -30,21 +30,21 @@ from flax.linen.linear import PrecisionLike
 from flax.traverse_util import flatten_dict, unflatten_dict
 from jax import custom_jvp, lax
 from jax.random import PRNGKey
-from transformers.generation_flax_utils import FlaxSampleOutput
-from transformers.modeling_flax_outputs import (
+from transformers_tinkering.src.transformers.generation_flax_utils import FlaxSampleOutput
+from transformers_tinkering.src.transformers.modeling_flax_outputs import (
     FlaxBaseModelOutput,
     FlaxBaseModelOutputWithPastAndCrossAttentions,
     FlaxCausalLMOutputWithCrossAttentions,
     FlaxSeq2SeqLMOutput,
 )
-from transformers.modeling_flax_utils import ACT2FN
-from transformers.models.bart.modeling_flax_bart import (
+from transformers_tinkering.src.transformers.modeling_flax_utils import ACT2FN
+from transformers_tinkering.src.transformers.models.bart.modeling_flax_bart import (
     FlaxBartAttention,
     FlaxBartForConditionalGeneration,
     FlaxBartForConditionalGenerationModule,
     FlaxBartModule,
 )
-from transformers.utils import logging
+from transformers_tinkering.src.transformers.utils import logging
 
 from .configuration import DalleBartConfig
 from .utils import PretrainedFromWandbMixin
