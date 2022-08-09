@@ -1659,7 +1659,7 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
                 )
                 else:
                     print('Generate --> if input_ids_2 --> preparing...')
-                    model_kwargs_2 = self._prepare_encoder_decoder_kwargs_for_generation_2(
+                    model_kwargs = self._prepare_encoder_decoder_kwargs_for_generation_2(
                         input_ids_1,
                         input_ids_2,
                         params,
