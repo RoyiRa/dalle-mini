@@ -1661,9 +1661,9 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
                     params,
                     {"attention_mask": attention_mask_2, **model_kwargs_input},
                 )
-                model_kwargs['attention_mask'] = jax.numpy.add(model_kwargs['attention_mask'], model_kwargs_2['attention_mask'])
+#                 model_kwargs['attention_mask'] = jax.numpy.add(model_kwargs['attention_mask'], model_kwargs_2['attention_mask'])
 #                 model_kwargs['encoder_outputs']['last_hidden_state'] = jax.numpy.subtract(model_kwargs['encoder_outputs']['last_hidden_state'], model_kwargs_2['encoder_outputs']['last_hidden_state'])
-                model_kwargs['encoder_outputs']['last_hidden_state'] = jax.numpy.add(model_kwargs['encoder_outputs']['last_hidden_state'], model_kwargs_2['encoder_outputs']['last_hidden_state'])
+                model_kwargs['encoder_outputs']['last_hidden_state'] = jax.numpy.subtract(model_kwargs['encoder_outputs']['last_hidden_state'], model_kwargs_2['encoder_outputs']['last_hidden_state'])
 
                 # model kwargs after this should have: attention_mask, encoder_outputs = {'attentions': None, 'hidden_states': None, 'last_hidden_state': ...}
 
@@ -1689,26 +1689,27 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
                             },
                         )
                     )
-                    model_kwargs_uncond_2 = (
-                        self._prepare_encoder_decoder_kwargs_for_generation(
-                            input_ids_uncond_2,
-                            params,
-                            {
-                                "attention_mask": attention_mask_uncond_2,
-                                **model_kwargs_input,
-                            },
-                        )
-                    )
+#                     model_kwargs_uncond_2 = (
+#                         self._prepare_encoder_decoder_kwargs_for_generation(
+#                             input_ids_uncond_2,
+#                             params,
+#                             {
+#                                 "attention_mask": attention_mask_uncond_2,
+#                                 **model_kwargs_input,
+#                             },
+#                         )
+#                     )
                 else:
                     model_kwargs_uncond_1 = None
                     model_kwargs_uncond_2 = None
+                
             # prepare decoder_input_ids for generation
             input_ids_1 = (
                 jnp.ones((input_ids_1.shape[0], 1), dtype="i4") * decoder_start_token_id
             )
-            input_ids_2 = (
-                jnp.ones((input_ids_2.shape[0], 1), dtype="i4") * decoder_start_token_id
-            )
+#             input_ids_2 = (
+#                 jnp.ones((input_ids_2.shape[0], 1), dtype="i4") * decoder_start_token_id
+#             )
 
         if not do_sample and num_beams == 1:
             print("test v2")
