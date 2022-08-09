@@ -1615,7 +1615,7 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
         **model_kwargs,
     ):
         """Edit: Allow super conditioning."""
-
+        print("test!")
         # set init values
         max_length = max_length if max_length is not None else self.config.max_length
         bos_token_id = (
