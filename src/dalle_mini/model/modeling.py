@@ -1656,14 +1656,14 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
                     {"attention_mask": attention_mask_1, **model_kwargs_input},
                 )
 
-                # model_kwargs_2 = self._prepare_encoder_decoder_kwargs_for_generation(
-                #     input_ids_2,
-                #     params,
-                #     {"attention_mask": attention_mask_2, **model_kwargs_input},
-                # )
-                # model_kwargs['attention_mask'] = jax.numpy.subtract(model_kwargs['attention_mask'], model_kwargs_2['attention_mask'])
-                # model_kwargs['encoder_outputs']['last_hidden_state'] = jax.numpy.subtract(model_kwargs['encoder_outputs']['last_hidden_state'], model_kwargs_2['encoder_outputs']['last_hidden_state'])
-
+                model_kwargs_2 = self._prepare_encoder_decoder_kwargs_for_generation(
+                    input_ids_2,
+                    params,
+                    {"attention_mask": attention_mask_2, **model_kwargs_input},
+                )
+                model_kwargs['attention_mask'] = jax.numpy.subtract(model_kwargs['attention_mask'], model_kwargs_2['attention_mask'])
+                model_kwargs['encoder_outputs']['last_hidden_state'] = jax.numpy.subtract(model_kwargs['encoder_outputs']['last_hidden_state'], model_kwargs_2['encoder_outputs']['last_hidden_state'])
+                
                 # model kwargs after this should have: attention_mask, encoder_outputs = {'attentions': None, 'hidden_states': None, 'last_hidden_state': ...}
 
             #TODO: if just encoder doesn't work, consider addressing unconds too.
