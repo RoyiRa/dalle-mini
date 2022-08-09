@@ -1669,6 +1669,7 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
 
             #TODO: if just encoder doesn't work, consider addressing unconds too.
                 if condition_scale != 1.0:
+                    print("test v1")
                     assert (
                         input_ids_uncond is not None
                     ), "`input_ids_uncond` has to be defined for super conditioning."
@@ -1694,8 +1695,12 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
             input_ids_1 = (
                 jnp.ones((input_ids_1.shape[0], 1), dtype="i4") * decoder_start_token_id
             )
+            input_ids_2 = (
+                jnp.ones((input_ids_2.shape[0], 1), dtype="i4") * decoder_start_token_id
+            )
 
         if not do_sample and num_beams == 1:
+            print("test v2")
             logits_processor = self._get_logits_processor(
                 no_repeat_ngram_size,
                 min_length,
@@ -1715,6 +1720,7 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
                 model_kwargs=model_kwargs,
             )
         elif do_sample and num_beams == 1:
+            print("test v3")
             logits_warper = self._get_logits_warper(
                 top_k=top_k, top_p=top_p, temperature=temperature
             )
@@ -1741,10 +1747,12 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
                 model_kwargs_uncond=model_kwargs_uncond,
             )
         elif not do_sample and num_beams > 1:
+            print("test v4")
             # broadcast input_ids & encoder_outputs
             input_ids_1 = self._expand_to_num_beams(input_ids_1, num_beams=num_beams)
 
             if "encoder_outputs" in model_kwargs:
+                print("test v5")
                 model_kwargs["encoder_outputs"][
                     "last_hidden_state"
                 ] = self._expand_to_num_beams(
@@ -1753,6 +1761,7 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
                 )
 
             if "attention_mask" in model_kwargs:
+                print("test v6")
                 model_kwargs["attention_mask"] = self._expand_to_num_beams(
                     model_kwargs["attention_mask"], num_beams=num_beams
                 )
