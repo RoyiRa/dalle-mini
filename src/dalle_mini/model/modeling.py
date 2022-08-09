@@ -1615,7 +1615,7 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
         **model_kwargs,
     ):
         """Edit: Allow super conditioning."""
-        print("test!")
+        print("test2")
         # set init values
         max_length = max_length if max_length is not None else self.config.max_length
         bos_token_id = (
@@ -1651,6 +1651,7 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
                     params,
                     {"attention_mask": attention_mask, **model_kwargs_input},
                 )
+                model_kwargs['encoder_outputs']['last_hidden_state'] = model_kwargs['encoder_outputs']['last_hidden_state'] * 500
                 if condition_scale != 1.0:
                     assert (
                         input_ids_uncond is not None
