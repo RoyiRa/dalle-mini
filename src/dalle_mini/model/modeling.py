@@ -1650,21 +1650,22 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
             # add encoder_outputs to model_kwargs
             if model_kwargs.get("encoder_outputs") is None:
                 model_kwargs_input = dict(model_kwargs)
-                if input_ids_2:
-                    print('Generate --> if input_ids_2 --> preparing...')
-                    model_kwargs_2 = self._prepare_encoder_decoder_kwargs_for_generation(
-                        input_ids_1,
-                        input_ids_2,
-                        params,
-                    {"attention_mask": attention_mask_1, "attention_mask_2": attention_mask_2, **model_kwargs_input},
-                    )
-                else:
+                if input_ids_2 is None:
                     print('Did not enter input_ids_2 in generate')
                     model_kwargs = self._prepare_encoder_decoder_kwargs_for_generation(
                     input_ids_1,
                     params,
                     {"attention_mask": attention_mask_1, **model_kwargs_input},
                 )
+                else:
+                    print('Generate --> if input_ids_2 --> preparing...')
+                    model_kwargs_2 = self._prepare_encoder_decoder_kwargs_for_generation_2(
+                        input_ids_1,
+                        input_ids_2,
+                        params,
+                    {"attention_mask": attention_mask_1, "attention_mask_2": attention_mask_2, **model_kwargs_input},
+                    )
+
 
             #TODO: if just encoder doesn't work, consider addressing unconds too.
                 if condition_scale != 1.0:
