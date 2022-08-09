@@ -1651,7 +1651,7 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
                     params,
                     {"attention_mask": attention_mask, **model_kwargs_input},
                 )
-                model_kwargs['encoder_outputs']['last_hidden_state'] = model_kwargs['encoder_outputs']['last_hidden_state'] * 500
+                model_kwargs['encoder_outputs']['last_hidden_state'] = model_kwargs['encoder_outputs']['last_hidden_state'] * 0
                 if condition_scale != 1.0:
                     assert (
                         input_ids_uncond is not None
