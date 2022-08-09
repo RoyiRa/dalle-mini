@@ -1757,24 +1757,24 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
                 condition_scale=condition_scale,
                 model_kwargs_uncond=model_kwargs_uncond_1,
             )
-            res_2 = self._sample(
-                input_ids_2,
-                max_length,
-                pad_token_id,
-                eos_token_id,
-                prng_key,
-                logits_warper=logits_warper,
-                logits_processor=logits_processor,
-                trace=trace,
-                params=params,
-                model_kwargs=model_kwargs_2,
-                condition_scale=condition_scale,
-                model_kwargs_uncond=model_kwargs_uncond_2,
-            )
-            print("ADDING sequences")
-            res = FlaxSampleOutput(sequences=jax.numpy.add(res_1.sequences, res_2.sequences))
-            print("finished ADDING sequences")
-            return res
+#             res_2 = self._sample(
+#                 input_ids_2,
+#                 max_length,
+#                 pad_token_id,
+#                 eos_token_id,
+#                 prng_key,
+#                 logits_warper=logits_warper,
+#                 logits_processor=logits_processor,
+#                 trace=trace,
+#                 params=params,
+#                 model_kwargs=model_kwargs_2,
+#                 condition_scale=condition_scale,
+#                 model_kwargs_uncond=model_kwargs_uncond_2,
+#             )
+#             print("ADDING sequences")
+#             res = FlaxSampleOutput(sequences=jax.numpy.add(res_1.sequences, res_2.sequences))
+#             print("finished ADDING sequences")
+            return res_1
         
         elif not do_sample and num_beams > 1:
             print("test v4 -- new naming here")
