@@ -1684,7 +1684,7 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
                             input_ids_uncond_1,
                             params,
                             {
-                                "attention_mask": attention_mask_uncond,
+                                "attention_mask": attention_mask_uncond_1,
                                 **model_kwargs_input,
                             },
                         )
@@ -1694,7 +1694,7 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
                             input_ids_uncond_2,
                             params,
                             {
-                                "attention_mask": attention_mask_uncond,
+                                "attention_mask": attention_mask_uncond_2,
                                 **model_kwargs_input,
                             },
                         )
@@ -1777,12 +1777,12 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
             return res
         
         elif not do_sample and num_beams > 1:
-            print("test v4")
+            print("test v4 -- new naming here")
             # broadcast input_ids & encoder_outputs
             input_ids_1 = self._expand_to_num_beams(input_ids_1, num_beams=num_beams)
 
             if "encoder_outputs" in model_kwargs:
-                print("test v5")
+                print("test v5 -- new naming here, including in if strings")
                 model_kwargs["encoder_outputs"][
                     "last_hidden_state"
                 ] = self._expand_to_num_beams(
