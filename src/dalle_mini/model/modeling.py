@@ -1137,9 +1137,9 @@ class FlaxBartEncoder(nn.Module):
     ):
         input_shape = input_ids.shape
         input_ids = input_ids.reshape(-1, input_shape[-1])
-
         hidden_states = self.embed_tokens(input_ids) * self.embed_scale
 
+        print("complete!")
         if self.config.use_absolute_position_embeddings:
             embed_pos = self.embed_positions(position_ids + self.offset)
             hidden_states = hidden_states + embed_pos
@@ -1395,7 +1395,7 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
     def num_params(self, params=None):
         if params is None:
             params = self.params
-        num_params = jax.tree_util.tree_map(
+        num_params = jax.tree_map(
             lambda param: param.size, flatten_dict(unfreeze(params))
         ).values()
         return sum(list(num_params))
@@ -1588,8 +1588,10 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
 
     def generate(
         self,
-        input_ids: jnp.ndarray,
-        attention_mask: Optional[jnp.ndarray] = None,
+        input_ids_1: jnp.ndarray,
+        input_ids_2: Optional[jnp.ndarray] = None,
+        attention_mask_1: Optional[jnp.ndarray] = None,
+        attention_mask_2: Optional[jnp.ndarray] = None,
         max_length: Optional[int] = None,
         pad_token_id: Optional[int] = None,
         bos_token_id: Optional[int] = None,
@@ -1612,10 +1614,12 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
         condition_scale: Optional[float] = 1.0,
         input_ids_uncond: Optional[jnp.ndarray] = None,
         attention_mask_uncond: Optional[jnp.ndarray] = None,
+        input_ids_uncond_2: Optional[jnp.ndarray] = None,
+        attention_mask_uncond_2: Optional[jnp.ndarray] = None,
         **model_kwargs,
     ):
         """Edit: Allow super conditioning."""
-        print("test2")
+
         # set init values
         max_length = max_length if max_length is not None else self.config.max_length
         bos_token_id = (
@@ -1647,11 +1651,22 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
             if model_kwargs.get("encoder_outputs") is None:
                 model_kwargs_input = dict(model_kwargs)
                 model_kwargs = self._prepare_encoder_decoder_kwargs_for_generation(
-                    input_ids,
+                    input_ids_1,
                     params,
-                    {"attention_mask": attention_mask, **model_kwargs_input},
+                    {"attention_mask": attention_mask_1, **model_kwargs_input},
                 )
-                model_kwargs['encoder_outputs']['last_hidden_state'] = model_kwargs['encoder_outputs']['last_hidden_state'] * 0
+
+                # model_kwargs_2 = self._prepare_encoder_decoder_kwargs_for_generation(
+                #     input_ids_2,
+                #     params,
+                #     {"attention_mask": attention_mask_2, **model_kwargs_input},
+                # )
+                # model_kwargs['attention_mask'] = jax.numpy.subtract(model_kwargs['attention_mask'], model_kwargs_2['attention_mask'])
+                # model_kwargs['encoder_outputs']['last_hidden_state'] = jax.numpy.subtract(model_kwargs['encoder_outputs']['last_hidden_state'], model_kwargs_2['encoder_outputs']['last_hidden_state'])
+
+                # model kwargs after this should have: attention_mask, encoder_outputs = {'attentions': None, 'hidden_states': None, 'last_hidden_state': ...}
+
+            #TODO: if just encoder doesn't work, consider addressing unconds too.
                 if condition_scale != 1.0:
                     assert (
                         input_ids_uncond is not None
@@ -1675,8 +1690,8 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
                 else:
                     model_kwargs_uncond = None
             # prepare decoder_input_ids for generation
-            input_ids = (
-                jnp.ones((input_ids.shape[0], 1), dtype="i4") * decoder_start_token_id
+            input_ids_1 = (
+                jnp.ones((input_ids_1.shape[0], 1), dtype="i4") * decoder_start_token_id
             )
 
         if not do_sample and num_beams == 1:
@@ -1689,7 +1704,7 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
                 forced_eos_token_id,
             )
             return self._greedy_search(
-                input_ids,
+                input_ids_1,
                 max_length,
                 pad_token_id,
                 eos_token_id,
@@ -1711,7 +1726,7 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
                 forced_eos_token_id,
             )
             return self._sample(
-                input_ids,
+                input_ids_1,
                 max_length,
                 pad_token_id,
                 eos_token_id,
@@ -1726,7 +1741,7 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
             )
         elif not do_sample and num_beams > 1:
             # broadcast input_ids & encoder_outputs
-            input_ids = self._expand_to_num_beams(input_ids, num_beams=num_beams)
+            input_ids_1 = self._expand_to_num_beams(input_ids_1, num_beams=num_beams)
 
             if "encoder_outputs" in model_kwargs:
                 model_kwargs["encoder_outputs"][
@@ -1751,7 +1766,7 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
             )
 
             return self._beam_search(
-                input_ids,
+                input_ids_1,
                 max_length,
                 pad_token_id,
                 eos_token_id,
