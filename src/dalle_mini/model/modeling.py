@@ -1771,7 +1771,7 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
                 condition_scale=condition_scale,
                 model_kwargs_uncond=model_kwargs_uncond_2,
             )
-            print('ADDING sequences")
+            print("ADDING sequences")
             res = FlaxSampleOutput(sequences=jax.numpy.add(res_1.sequences, res_2.sequences))
             print("finished ADDING sequences")
             return res
