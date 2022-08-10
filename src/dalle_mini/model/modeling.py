@@ -1590,8 +1590,10 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
         self,
         input_ids_1: jnp.ndarray,
         input_ids_2: Optional[jnp.ndarray] = None,
+        input_ids_3: Optional[jnp.ndarray] = None,
         attention_mask_1: Optional[jnp.ndarray] = None,
         attention_mask_2: Optional[jnp.ndarray] = None,
+        attention_mask_3: Optional[jnp.ndarray] = None,
         alpha: Optional[float] = None,
         should_subtract: Optional[bool] = None,
         max_length: Optional[int] = None,
@@ -1660,16 +1662,18 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
                     {"attention_mask": attention_mask_1, **model_kwargs_input},
                 )
                 else:
-                    print('Generate --> if input_ids_2 --> preparing...')
-                    model_kwargs = self._prepare_encoder_decoder_kwargs_for_generation_2(
-                        input_ids_1,
-                        input_ids_2,
-                        alpha,
-                        should_subtract,
-                        params,
-                    {"attention_mask": attention_mask_1, "attention_mask_2": attention_mask_2, **model_kwargs_input},
-                    )
-
+                    if input_ids_3 is None:
+                        print('Generate --> if input_ids_2 --> preparing...')
+                        model_kwargs = self._prepare_encoder_decoder_kwargs_for_generation_2(
+                            input_ids_1,
+                            input_ids_2,
+                            alpha,
+                            should_subtract,
+                            params,
+                        {"attention_mask": attention_mask_1, "attention_mask_2": attention_mask_2, **model_kwargs_input},
+                        )
+                    else:
+                        print('Generate --> if input_ids_3 --> preparing...')
 
             #TODO: if just encoder doesn't work, consider addressing unconds too.
                 if condition_scale != 1.0:
