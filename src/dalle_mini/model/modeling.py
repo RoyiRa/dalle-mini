@@ -1592,6 +1592,7 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
         input_ids_2: Optional[jnp.ndarray] = None,
         attention_mask_1: Optional[jnp.ndarray] = None,
         attention_mask_2: Optional[jnp.ndarray] = None,
+        alpha: Optional[float] = None,
         max_length: Optional[int] = None,
         pad_token_id: Optional[int] = None,
         bos_token_id: Optional[int] = None,
@@ -1662,6 +1663,7 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
                     model_kwargs = self._prepare_encoder_decoder_kwargs_for_generation_2(
                         input_ids_1,
                         input_ids_2,
+                        alpha,
                         params,
                     {"attention_mask": attention_mask_1, "attention_mask_2": attention_mask_2, **model_kwargs_input},
                     )
