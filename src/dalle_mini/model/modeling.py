@@ -1674,6 +1674,15 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
                         )
                     else:
                         print('Generate --> if input_ids_3 --> preparing...')
+                        model_kwargs = self._prepare_encoder_decoder_kwargs_for_generation_3(
+                            input_ids_1,
+                            input_ids_2,
+                            input_ids_3,
+                            alpha,
+                            should_subtract,
+                            params,
+                        {"attention_mask": attention_mask_1, "attention_mask_2": attention_mask_2, "attention_mask_3": attention_mask_3, **model_kwargs_input},
+                        )
 
             #TODO: if just encoder doesn't work, consider addressing unconds too.
                 if condition_scale != 1.0:
