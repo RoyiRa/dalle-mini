@@ -1623,7 +1623,9 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
         **model_kwargs,
     ):
         """Edit: Allow super conditioning."""
-
+        print('in Generate')
+        print('alpha: ', alpha)
+        print('should_subtract ', should_subtract)
         # set init values
         max_length = max_length if max_length is not None else self.config.max_length
         bos_token_id = (
@@ -1655,7 +1657,6 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
             if model_kwargs.get("encoder_outputs") is None:
                 model_kwargs_input = dict(model_kwargs)
                 if input_ids_2 is None:
-                    print('Did not enter input_ids_2 in generate')
                     model_kwargs = self._prepare_encoder_decoder_kwargs_for_generation(
                     input_ids_1,
                     params,
@@ -1663,7 +1664,6 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
                 )
                 else:
                     if input_ids_3 is None:
-                        print('Generate --> if input_ids_2 --> preparing...')
                         model_kwargs = self._prepare_encoder_decoder_kwargs_for_generation_2(
                             input_ids_1,
                             input_ids_2,
@@ -1673,7 +1673,6 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
                         {"attention_mask": attention_mask_1, "attention_mask_2": attention_mask_2, **model_kwargs_input},
                         )
                     else:
-                        print('Generate --> if input_ids_3 --> preparing...')
                         model_kwargs = self._prepare_encoder_decoder_kwargs_for_generation_3(
                             input_ids_1,
                             input_ids_2,
