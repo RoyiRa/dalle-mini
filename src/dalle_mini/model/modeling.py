@@ -1651,36 +1651,36 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
         if self.config.is_encoder_decoder:
             # add encoder_outputs to model_kwargs
             if model_kwargs.get("encoder_outputs") is None:
-                model_kwargs_input = dict(model_kwargs)
-                if input_ids_2 is None:
-                    model_kwargs = self._prepare_encoder_decoder_kwargs_for_generation(
-                    input_ids_1,
-                    params,
-                    {"attention_mask": attention_mask_1, **model_kwargs_input},
-                )
-                else:
-                    if input_ids_3 is None:
-                        model_kwargs = self._prepare_encoder_decoder_kwargs_for_generation_2(
-                            input_ids_1,
-                            input_ids_2,
-                            alpha,
-                            should_subtract,
-                            params,
-                        {"attention_mask": attention_mask_1, "attention_mask_2": attention_mask_2, **model_kwargs_input},
-                        )
-                    else:
-                        model_kwargs = self._prepare_encoder_decoder_kwargs_for_generation_3(
-                            input_ids_1,
-                            input_ids_2,
-                            input_ids_3,
-                            alpha,
-                            should_subtract,
-                            params,
-                        {"attention_mask": attention_mask_1, "attention_mask_2": attention_mask_2, "attention_mask_3": attention_mask_3, **model_kwargs_input},
-                        )
+#                 model_kwargs_input = dict(model_kwargs)
+#                 if input_ids_2 is None:
+#                     model_kwargs = self._prepare_encoder_decoder_kwargs_for_generation(
+#                     input_ids_1,
+#                     params,
+#                     {"attention_mask": attention_mask_1, **model_kwargs_input},
+#                 )
+#                 else:
+#                     if input_ids_3 is None:
+#                         model_kwargs = self._prepare_encoder_decoder_kwargs_for_generation_2(
+#                             input_ids_1,
+#                             input_ids_2,
+#                             alpha,
+#                             should_subtract,
+#                             params,
+#                         {"attention_mask": attention_mask_1, "attention_mask_2": attention_mask_2, **model_kwargs_input},
+#                         )
+#                     else:
+#                         model_kwargs = self._prepare_encoder_decoder_kwargs_for_generation_3(
+#                             input_ids_1,
+#                             input_ids_2,
+#                             input_ids_3,
+#                             alpha,
+#                             should_subtract,
+#                             params,
+#                         {"attention_mask": attention_mask_1, "attention_mask_2": attention_mask_2, "attention_mask_3": attention_mask_3, **model_kwargs_input},
+#                         )
                 
                 print(model_kwargs)
-                print(model_kwargs.keys())
+#                 print(model_kwargs.keys())
             #TODO: if just encoder doesn't work, consider addressing unconds too.
                 if condition_scale != 1.0:
                     print("test v1")
