@@ -1697,16 +1697,16 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
                     assert (
                         num_beams == 1
                     ), "`num_beams` has to be 1 for super conditioning."
-                    model_kwargs_uncond_1 = (
-                        self._prepare_encoder_decoder_kwargs_for_generation(
-                            input_ids_uncond_1,
-                            params,
-                            {
-                                "attention_mask": attention_mask_uncond_1,
-                                **model_kwargs_input,
-                            },
-                        )
-                    )
+#                     model_kwargs_uncond_1 = (
+#                         self._prepare_encoder_decoder_kwargs_for_generation(
+#                             input_ids_uncond_1,
+#                             params,
+#                             {
+#                                 "attention_mask": attention_mask_uncond_1,
+#                                 **model_kwargs_input,
+#                             },
+#                         )
+#                     )
 
 
 #                     if input_ids_2 is None:
