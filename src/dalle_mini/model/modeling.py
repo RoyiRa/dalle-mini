@@ -1651,7 +1651,7 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
         if self.config.is_encoder_decoder:
             # add encoder_outputs to model_kwargs
             if model_kwargs.get("encoder_outputs") is None:
-#                 model_kwargs_input = dict(model_kwargs)
+                model_kwargs_input = dict(model_kwargs)
 #                 if input_ids_2 is None:
 #                     model_kwargs = self._prepare_encoder_decoder_kwargs_for_generation(
 #                     input_ids_1,
