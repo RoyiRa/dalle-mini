@@ -1618,6 +1618,10 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
         condition_scale: Optional[float] = 1.0,
         input_ids_uncond_1: Optional[jnp.ndarray] = None,
         attention_mask_uncond_1: Optional[jnp.ndarray] = None,
+        input_ids_uncond_2: Optional[jnp.ndarray] = None,
+        attention_mask_uncond_2: Optional[jnp.ndarray] = None,
+        input_ids_uncond_3: Optional[jnp.ndarray] = None,
+        attention_mask_uncond_3: Optional[jnp.ndarray] = None,
         **model_kwargs,
     ):
         """Edit: Allow super conditioning."""
@@ -1652,32 +1656,32 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
             # add encoder_outputs to model_kwargs
             if model_kwargs.get("encoder_outputs") is None:
                 model_kwargs_input = dict(model_kwargs)
-#                 if input_ids_2 is None:
-#                     model_kwargs = self._prepare_encoder_decoder_kwargs_for_generation(
-#                     input_ids_1,
-#                     params,
-#                     {"attention_mask": attention_mask_1, **model_kwargs_input},
-#                 )
-#                 else:
-#                     if input_ids_3 is None:
-#                         model_kwargs = self._prepare_encoder_decoder_kwargs_for_generation_2(
-#                             input_ids_1,
-#                             input_ids_2,
-#                             alpha,
-#                             should_subtract,
-#                             params,
-#                         {"attention_mask": attention_mask_1, "attention_mask_2": attention_mask_2, **model_kwargs_input},
-#                         )
-#                     else:
-#                         model_kwargs = self._prepare_encoder_decoder_kwargs_for_generation_3(
-#                             input_ids_1,
-#                             input_ids_2,
-#                             input_ids_3,
-#                             alpha,
-#                             should_subtract,
-#                             params,
-#                         {"attention_mask": attention_mask_1, "attention_mask_2": attention_mask_2, "attention_mask_3": attention_mask_3, **model_kwargs_input},
-#                         )
+                if input_ids_2 is None:
+                    model_kwargs = self._prepare_encoder_decoder_kwargs_for_generation(
+                    input_ids_1,
+                    params,
+                    {"attention_mask": attention_mask_1, **model_kwargs_input},
+                )
+                else:
+                    if input_ids_3 is None:
+                        model_kwargs = self._prepare_encoder_decoder_kwargs_for_generation_2(
+                            input_ids_1,
+                            input_ids_2,
+                            alpha,
+                            should_subtract,
+                            params,
+                        {"attention_mask": attention_mask_1, "attention_mask_2": attention_mask_2, **model_kwargs_input},
+                        )
+                    else:
+                        model_kwargs = self._prepare_encoder_decoder_kwargs_for_generation_3(
+                            input_ids_1,
+                            input_ids_2,
+                            input_ids_3,
+                            alpha,
+                            should_subtract,
+                            params,
+                        {"attention_mask": attention_mask_1, "attention_mask_2": attention_mask_2, "attention_mask_3": attention_mask_3, **model_kwargs_input},
+                        )
                 
                 print(model_kwargs)
 #                 print(model_kwargs.keys())
@@ -1693,16 +1697,43 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
                     assert (
                         num_beams == 1
                     ), "`num_beams` has to be 1 for super conditioning."
-                    model_kwargs_uncond_1 = (
-                        self._prepare_encoder_decoder_kwargs_for_generation(
+#                     model_kwargs_uncond_1 = (
+#                         self._prepare_encoder_decoder_kwargs_for_generation(
+#                             input_ids_uncond_1,
+#                             params,
+#                             {
+#                                 "attention_mask": attention_mask_uncond_1,
+#                                 **model_kwargs_input,
+#                             },
+#                         )
+#                     )
+                if input_ids_2 is None:
+                    model_kwargs_uncond_1 = self._prepare_encoder_decoder_kwargs_for_generation(
+                    input_ids_uncond_1,
+                    params,
+                    {"attention_mask": attention_mask_uncond_1, **model_kwargs_input},
+                )
+                else:
+                    if input_ids_3 is None:
+                        model_kwargs_uncond_1 = self._prepare_encoder_decoder_kwargs_for_generation_2(
                             input_ids_uncond_1,
+                            input_ids_uncond_2,
+                            alpha,
+                            should_subtract,
                             params,
-                            {
-                                "attention_mask": attention_mask_uncond_1,
-                                **model_kwargs_input,
-                            },
+                        {"attention_mask": attention_mask_uncond_1, "attention_mask_2": attention_mask_uncond_2, **model_kwargs_input},
                         )
-                    )
+                    else:
+                        model_kwargs_uncond_1 = self._prepare_encoder_decoder_kwargs_for_generation_3(
+                            input_ids_uncond_1,
+                            input_ids_uncond_2,
+                            input_ids_uncond_3,
+                            alpha,
+                            should_subtract,
+                            params,
+                        {"attention_mask": attention_mask_uncond_1, "attention_mask_2": attention_mask_uncond_2, "attention_mask_3": attention_mask_uncond_3, **model_kwargs_input},
+                        )
+                    
                 else:
                     model_kwargs_uncond_1 = None
                 
