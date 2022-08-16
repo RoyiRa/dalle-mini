@@ -1596,7 +1596,7 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
         attention_mask_3: Optional[jnp.ndarray] = None,
         alpha: Optional[float] = None,
         should_subtract: Optional[bool] = None,
-        should_add_avg: Optional[bool] = None,
+        avg_filename: Optional[str] = None,
         max_length: Optional[int] = None,
         pad_token_id: Optional[int] = None,
         bos_token_id: Optional[int] = None,
@@ -1670,7 +1670,7 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
                             input_ids_2,
                             alpha,
                             should_subtract,
-                            should_add_avg,
+                            avg_filename,
                             params,
                         {"attention_mask": attention_mask_1, "attention_mask_2": attention_mask_2, **model_kwargs_input},
                         )
@@ -1681,7 +1681,7 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
                             input_ids_3,
                             alpha,
                             should_subtract,
-                            should_add_avg,
+                            avg_filename,
                             params,
                         {"attention_mask": attention_mask_1, "attention_mask_2": attention_mask_2, "attention_mask_3": attention_mask_3, **model_kwargs_input},
                         )
@@ -1724,7 +1724,7 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
                                 input_ids_uncond_2,
                                 alpha,
                                 should_subtract,
-                                should_add_avg,
+                                avg_filename,
                                 params,
                             {"attention_mask": attention_mask_uncond_1, "attention_mask_2": attention_mask_uncond_2, **model_kwargs_input},
                             )
@@ -1735,7 +1735,7 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
                                 input_ids_uncond_3,
                                 alpha,
                                 should_subtract,
-                                should_add_avg,
+                                avg_filename,
                                 params,
                             {"attention_mask": attention_mask_uncond_1, "attention_mask_2": attention_mask_uncond_2, "attention_mask_3": attention_mask_uncond_3, **model_kwargs_input},
                             )
