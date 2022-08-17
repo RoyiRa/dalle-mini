@@ -1686,9 +1686,6 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
                         {"attention_mask": attention_mask_1, "attention_mask_2": attention_mask_2, "attention_mask_3": attention_mask_3, **model_kwargs_input},
                         )
                 
-                print(model_kwargs)
-#                 print(model_kwargs.keys())
-            #TODO: if just encoder doesn't work, consider addressing unconds too.
                 if condition_scale != 1.0:
                     print("test v1")
                     assert (
