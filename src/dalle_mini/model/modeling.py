@@ -1744,9 +1744,6 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
             input_ids_1 = (
                 jnp.ones((input_ids_1.shape[0], 1), dtype="i4") * decoder_start_token_id
             )
-            model_kwargs_uncond_1['encoder_outputs']['attention_mask'] = None
-            model_kwargs['encoder_outputs']['attention_mask'] = None
-            print(model_kwargs)
             
         if not do_sample and num_beams == 1:
             print("test v2")
