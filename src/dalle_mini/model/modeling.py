@@ -1597,6 +1597,7 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
         alpha: Optional[float] = None,
         should_subtract_1: Optional[bool] = None,
         should_subtract_2: Optional[bool] = None,
+        should_proj_if_subtract: Optional[bool] = None,
         avg_filename: Optional[str] = None,
         max_length: Optional[int] = None,
         pad_token_id: Optional[int] = None,
